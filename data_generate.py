@@ -1,4 +1,4 @@
-import util.py
+from util import *
 
 
 # generate bivaraite $X, Y, Z$ as in Appendix F
