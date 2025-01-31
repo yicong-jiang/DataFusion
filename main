@@ -1,0 +1,65 @@
+from util import *
+from csb import *
+from data_generate import *
+
+n = 2000
+nfolds = 2
+alpha = 0.05
+
+seed_list = list(range(1, 1 + 10))
+rho_list = [0]# [0, 0.3, 0.5]
+sigma_list = [1] #np.array(range(1, 11)) * 0.1
+
+
+seed_n = len(seed_list)
+rho_n = len(rho_list)
+sigma_n = len(sigma_list)
+
+theo_bounds = np.zeros((seed_n, rho_n, sigma_n, 2))
+our_bounds = np.zeros((seed_n, rho_n, sigma_n, 2))
+db_bounds = np.zeros((seed_n, rho_n, sigma_n, 2))
+
+for seed_ind in range(seed_n):
+    for rho_ind in range(rho_n):
+        for sigma_ind in range(sigma_n):
+            dgp_seed = seed_list[seed_ind]
+            rho = rho_list[rho_ind]
+            sigma = sigma_list[sigma_ind]
+            
+            data_prepro = ols_preprocessing(dgp_seed=dgp_seed, n = n, rho = rho, sigma = sigma)
+            data_prepro.data_gen_()
+            theo_bounds[seed_ind, rho_ind, sigma_ind, 0] = data_prepro.bound_theo_lower
+            theo_bounds[seed_ind, rho_ind, sigma_ind, 1] = data_prepro.bound_theo_upper
+
+            data = data_prepro.data
+            csb = cauchy_schwarz(
+                covariates=data['X'], 
+                treatment=data['W'], 
+                outcome=data['y'],
+                nfolds = nfolds)
+            #csb_res = csb.fit(RidgeCV(alphas = alpha), RidgeCV(alphas = alpha))
+            csb_res = csb.fit(LinearRegression(), LinearRegression())
+            our_bounds[seed_ind, rho_ind, sigma_ind, 0] = csb.lcb
+            our_bounds[seed_ind, rho_ind, sigma_ind, 1] = csb.ucb
+
+            
+            data['pis'] = 0.5 * np.ones(len(data['W']))
+            dbnd = DualBounds(
+            f=lambda y0, y1, x: y0 * y1, # defines the estimand
+            covariates=data['X'], # n x p covariate matrix
+            treatment=data['W'], # n-length treatment vector
+            outcome=data['y'], # n-length outcome vector
+            propensities=data['pis'], # n-length propensity scores (optional)
+            outcome_model='ridge', # description of model for Y | X, W
+            )
+
+
+            dbnd.fit(
+                nfolds=nfolds, # number of cross-fitting folds
+                alpha=alpha, # nominal level,
+                verbose=True # show progress bars
+            )
+
+            dbnd_res = dbnd.results()
+            db_bounds[seed_ind, rho_ind, sigma_ind, 0] = dbnd_res['Lower'].iloc[2]
+            db_bounds[seed_ind, rho_ind, sigma_ind, 1] = dbnd_res['Upper'].iloc[2]
