@@ -1,4 +1,4 @@
-import util.py
+from util import *
 
 class cauchy_schwarz:
     def __init__(self, covariates, treatment, outcome, nfolds):
