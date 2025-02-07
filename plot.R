@@ -3,8 +3,8 @@
 library(ggplot2)
 
 
-#filename = '_5_26_lognorm.csv'
-filename = '_5_26_ols.csv'
+# take 4_1_1 as example; change to other file name accordingly
+filename = '_4_1_1.csv'
 coverage_file_name = paste('coverage', filename, sep = '')
 width_file_name = paste('width', filename, sep = '')
 
