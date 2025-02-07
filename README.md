@@ -3,7 +3,7 @@ Code for "Semiparametric inference for partially identifiable data fusion estima
 
 To run the code, one first need to install the python package <code>dualbounds</code>. RUn the following code for installation:
 
-<code>python -m pip install dualbounds<code
+<code>python -m pip install dualbounds </code>
 
 Before running the code, please first set the working directory to be <code>DataFusion</code> folder.
 
