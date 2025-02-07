@@ -381,4 +381,5 @@ for (i in 1:k) {
 final_lower <- coef.upper - qnorm(0.975) * sqrt(var.upper)
 final_upper <- coef.lower + qnorm(0.975) * sqrt(var.lower)
 
+print("The estimated CS lower and upper bounds for the OLS parameter is as follows:")
 print(c(final_lower[3], final_upper[3]))
