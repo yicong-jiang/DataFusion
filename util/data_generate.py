@@ -1,4 +1,4 @@
-from util import *
+from util/util import *
 
 
 # generate bivaraite $X, Y, Z$ as in Appendix F
