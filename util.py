@@ -1,5 +1,6 @@
 import dualbounds as db
 import numpy as np
+import pandas as pd
 from dualbounds.generic import DualBounds
 from numpy.linalg import inv
 from sklearn.linear_model import RidgeCV
