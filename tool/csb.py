@@ -1,4 +1,4 @@
-from util import *
+from tool/util import *
 
 class cauchy_schwarz_modified:
     def __init__(self, covariates, treatment, outcome, nfolds, rprobs, rfit = False):
