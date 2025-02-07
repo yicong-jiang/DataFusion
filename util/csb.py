@@ -1,6 +1,6 @@
 from util import *
 
-class cauthy_schwartz_modified:
+class cauchy_schwarz_modified:
     def __init__(self, covariates, treatment, outcome, nfolds, rprobs, rfit = False):
         self.X = covariates
         self.R = treatment
