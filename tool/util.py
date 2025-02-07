@@ -11,6 +11,9 @@ import time
 import matplotlib.pyplot as plt
 
 
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
 class ols_preprocessing:
     def save_hyperparameters(self, ignore=[]):
         frame = inspect.currentframe().f_back
